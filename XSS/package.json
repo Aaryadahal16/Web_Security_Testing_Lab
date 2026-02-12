@@ -1,0 +1,9 @@
+{
+  "name": "xss-lab",
+  "version": "1.0.0",
+  "description": "XSS Camera Lab",
+  "main": "victim_server.js",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
